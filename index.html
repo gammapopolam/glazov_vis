@@ -55,7 +55,7 @@ if(clickedFeature) {
   var stop_id = 'stop_'+attributes.stop_id;
   var stop_name = attributes.stop_name
   let popup = L.popup().setLatLng(latlng).setContent(stop_name).openOn(map);
-  var tileURL = `https://raw.githubusercontent.com/gammapopolam/glazov-vis/main/tiles/${stop_id}/{z}/{x}/{y}.mvt`
+  var tileURL = `https://raw.githubusercontent.com/gammapopolam/glazov_vis/main/tiles/${stop_id}/{z}/{x}/{y}.mvt`
   console.log(tileURL);
   var tile = L.vectorGrid.protobuf(tileURL, {
   vectorTileLayerStyles: {
@@ -79,17 +79,22 @@ if(clickedFeature) {
                 weight: properties.width,
                 color: '#' + properties.color,
                 fillColor: '#' + properties.fillColor,
-                fillOpacity: 1,
+                fillOpacity: 0,
+				opacity: 0,
                 fill: true
             }
         },
     }
-  }).addTo(map);
+  })
   var layergroup = new L.LayerGroup;
   layergroup.addLayer(tile);
+  layergroup.addTo(map);
   popup.on("remove", function () {
     console.log("popup remove");
+	console.log(layergroup);
     layergroup.clearLayers();
+	map.removeLayer(layergroup);
+	layergroup.eachLayer(function(layer) {layergroup.removeLayer(layer);});
 })}
 };
 
